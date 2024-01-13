@@ -6,7 +6,8 @@ from src.tinder import TinderAPI
 from src.dialog import Dialog
 from src.logger import logger
 from opencc import OpenCC
-
+import random
+import time 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -26,6 +27,11 @@ TINDER_TOKEN = os.getenv('TINDER_TOKEN')
 
 @scheduler.scheduled_job("cron", minute='*/5', second=0, id='reply_messages')
 def reply_messages():
+
+    random_delay_minutes = random.randint(2, 8)
+    random_delay_seconds = random_delay_minutes * 60
+    time.sleep(random_delay_seconds)
+
     tinder_api = TinderAPI(TINDER_TOKEN)
     profile = tinder_api.profile()
 
