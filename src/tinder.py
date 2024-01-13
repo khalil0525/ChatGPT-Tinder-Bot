@@ -10,16 +10,16 @@ class TinderAPI():
         self.chatroom_match_id = []
 
     def profile(self):
-        data = requests.get(TINDER_URL + "/v2/profile?include=account%2Cuser", headers={"X-Auth-Token": self._token}).json()
+        data = requests.get(TINDER_URL + "/v3/profile?include=account%2Cuser", headers={"X-Auth-Token": self._token}).json()
         return Profile(data["data"], self)
 
     def matches(self, limit=10):
-        data = requests.get(TINDER_URL + f"/v2/matches?count={limit}", headers={"X-Auth-Token": self._token}).json()
+        data = requests.get(TINDER_URL + f"/v3/matches?count={limit}", headers={"X-Auth-Token": self._token}).json()
         self.chatroom_match_id = list(map(lambda match: match['id'], data["data"]["matches"]))
         return list(map(lambda match: Match(match, self), data["data"]["matches"]))
 
     def get_messages(self, match_id):
-        data = requests.get(TINDER_URL + f"/v2/matches/{match_id}/messages?count=50", headers={"X-Auth-Token": self._token}).json()
+        data = requests.get(TINDER_URL + f"/v3/matches/{match_id}/messages?count=50", headers={"X-Auth-Token": self._token}).json()
         return Chatroom(data['data'], match_id, self)
 
     def get_user_info(self, user_id):
